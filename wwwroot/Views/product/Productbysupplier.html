@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get Products by Supplier</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/Mansi/pages.css" />
+    <link rel="stylesheet" href="/css/pages.css" />
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -48,7 +48,7 @@
             const token = localStorage.getItem('authToken');
             if (!token) {
                 alert('You must log in to access this feature.');
-                window.location.href = "/Views/Mansi/include/login.html"; // Redirect to login page
+                window.location.href = "/Views/include/login.html"; // Redirect to login page
             }
 
             $('#getProductsBySupplierBtn').click(async function () {
@@ -62,7 +62,7 @@
 
                 try {
                     // Make the API request with Authorization header
-                    const response = await axios.get(`https://localhost:7118/api/Product/ProductBySupplier/${supplierName}`, {
+                    const response = await axios.get(`https://localhost:7179/api/Product/ProductBySupplier/${supplierName}`, {
                         headers: {
                             'Authorization': `Bearer ${token}` // Attach the token
                         }
@@ -104,7 +104,7 @@
                     // If the error is related to authorization (e.g., invalid or expired token), redirect to login page
                     if (error.response && error.response.status === 401) {
                         alert('Unauthorized access. Please log in again.');
-                        window.location.href = "/Views/Mansi/include/login.html"; // Redirect to login page
+                        window.location.href = "/Views/include/login.html"; // Redirect to login page
                     }
                 }
             });

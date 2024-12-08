@@ -143,33 +143,56 @@ namespace Ekart_Application.IServices.Services
             return result;
         }
 
-       public async Task<bool> DeleteCustomerAsync(string customerId)
+        public async Task<bool> DeleteCustomerAsync(string customerId)
         {
-            // Check if customer exists
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(c => c.CustomerId == customerId);
+            using var transaction = await _context.Database.BeginTransactionAsync();
 
-            if (customer == null)
+            try
             {
-                // If customer is not found, throw KeyNotFoundException for global exception handling
-                throw new KeyNotFoundException($"Customer with ID {customerId} not found.");
+                // Step 1: Delete Order Details
+                var orderIds = await _context.Orders
+                    .Where(o => o.CustomerId == customerId)
+                    .Select(o => o.OrderId)
+                    .ToListAsync();
+
+                if (orderIds.Any())
+                {
+                    var orderDetails = await _context.OrderDetails
+                        .Where(od => orderIds.Contains(od.OrderId))
+                        .ToListAsync();
+                    _context.OrderDetails.RemoveRange(orderDetails);
+                }
+
+                // Step 2: Delete Orders
+                var orders = await _context.Orders
+                    .Where(o => o.CustomerId == customerId)
+                    .ToListAsync();
+                _context.Orders.RemoveRange(orders);
+
+                // Step 3: Delete Customer
+                var customer = await _context.Customers
+                    .FirstOrDefaultAsync(c => c.CustomerId == customerId);
+                if (customer == null)
+                {
+                    return false; // Customer not found
+                }
+                _context.Customers.Remove(customer);
+
+                // Save all changes
+                await _context.SaveChangesAsync();
+
+                // Commit transaction
+                await transaction.CommitAsync();
+
+                return true;
             }
-
-            // Check if customer has associated orders
-            bool hasOrders = await _context.Orders
-                .AnyAsync(o => o.CustomerId == customerId);
-
-            if (hasOrders)
+            catch (Exception ex)
             {
-                // Throw InvalidOperationException if the customer has orders
-                throw new InvalidOperationException("Cannot delete customer with existing orders.");
+                // Rollback transaction on error
+                await transaction.RollbackAsync();
+                Console.WriteLine($"Error during deletion: {ex.Message}");
+                throw;
             }
-
-            // Delete the customer if no issues
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
-
-            return true; // Return true indicating that the customer was successfully deleted
         }
     }
 }

@@ -83,19 +83,19 @@
             <h2 class="text-center mb-4">Manage Product</h2>
             <div class="features-container">
                 <div class="feature">
-                    <h3><a href="/Views/Mansi/product/productByCategory.html">Check By Category</a></h3>
+                    <h3><a href="/Views/product/productByCategory.html">Check By Category</a></h3>
                 </div>
                 <div class="feature">
-                    <h3><a href="/Views/Mansi/product/GetDiscontinued.html">Check Discontinued</a></h3>
+                    <h3><a href="/Views/product/GetDiscontinued.html">Check Discontinued</a></h3>
                 </div>
                 <div class="feature">
-                    <h3><a href="/Views/Mansi/product/Productbysupplier.html">Product By Supplier</a></h3>
+                    <h3><a href="/Views/product/Productbysupplier.html">Product By Supplier</a></h3>
                 </div>
                 <div class="feature">
-                    <h3><a href="/Views/Mansi/product/unitbystock.html">Products in Stock</a></h3>
+                    <h3><a href="/Views/product/unitbystock.html">Products in Stock</a></h3>
                 </div>
                 <div class="feature">
-                    <h3><a href="/Views/Mansi/product/UnitsOnOrder.html">Products on Order</a></h3>
+                    <h3><a href="/Views/product/UnitsOnOrder.html">Products on Order</a></h3>
                 </div>
                 <div class="feature">
                     <h3><a href="/Views/product/GetAllProductsByCategoryId.html">Products By CategoryId</a></h3>
@@ -114,7 +114,7 @@
                     <h3><a href="/Views/order/">Order By Customer ID</a></h3>
                 </div>
                 <div class="feature">
-                    <h3><a href="/Views/Mansi/order/GetCustomerWithHighestOrder.html">Customer with Highest Order</a></h3>
+                    <h3><a href="/Views/order/GetCustomerWithHighestOrder.html">Customer with Highest Order</a></h3>
                 </div>
             </div>
         </section>
@@ -124,13 +124,13 @@
             <h2 class="text-center mb-4">Manage Customers</h2>
             <div class="features-container">
                 <div class="feature">
-                    <h3><a href="/Views/Mansi/customer/">View Customers</a></h3>
+                    <h3><a href="/Views/customer/">View Customers</a></h3>
                 </div>
                 <div class="feature">
-                    <h3><a href="/Views/Mansi/customer/getbycityname.html">Customers By City</a></h3>
+                    <h3><a href="/Views/customer/getbycityname.html">Customers By City</a></h3>
                 </div>
                 <div class="feature">
-                    <h3><a href="/Views/Mansi/customer/deletecustomer.html">Delete Customer</a></h3>
+                    <h3><a href="/Views/customer/deletecustomer.html">Delete Customer</a></h3>
                 </div>
             </div>
         </section>
@@ -146,7 +146,7 @@
             const token = localStorage.getItem('authToken');
             if (!token) {
                 // Redirect to login if no token is found
-                window.location.href = '/Views/Mansi/include/login.html';
+                window.location.href = '/Views/include/login.html';
             }
         };
         // JavaScript logic for logout functionality
@@ -163,7 +163,7 @@
             logoutButton.addEventListener('click', () => {
                 localStorage.removeItem('authToken');
                 alert('You have been logged out.');
-                window.location.href = '/Views/Mansi/include/login.html';
+                window.location.href = '/Views/include/login.html';
             });
         });
     </script>

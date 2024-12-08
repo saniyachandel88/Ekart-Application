@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get Products by Category</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/Mansi/pages.css" />
+    <link rel="stylesheet" href="/css/pages.css" />
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -53,7 +53,7 @@
             // Ensure the token is available
             if (!token) {
                 alert("You must log in to access this feature.");
-                window.location.href = "/Views/Mansi/include/login.html";
+                window.location.href = "/Views/include/login.html";
                 return;
             }
 
@@ -74,7 +74,7 @@
                 if (decodedToken.exp < currentTime) {
                     alert("Session expired. Please log in again.");
                     localStorage.removeItem("authToken");
-                    window.location.href = "/Views/Mansi/include/login.html";
+                    window.location.href = "/Views/include/login.html";
                     return;
                 }
 
@@ -88,7 +88,7 @@
                 alert("Invalid token. Please log in again.");
                 console.error("Token decoding error:", error);
                 localStorage.removeItem("authToken");
-                window.location.href = "/Views/Mansi/include/login.html";
+                window.location.href = "/Views/include/login.html";
                 return;
             }
 
@@ -98,7 +98,7 @@
 
                 // Make the API call with the token in the Authorization header
                 const response = await axios.get(
-                    `https://localhost:7118/api/Product/ByCategoryName/${categoryName}`,
+                    `https://localhost:7179/api/Product/ByCategoryName/${categoryName}`,
                     {
                         headers: {
                             "Authorization": `Bearer ${token}`,
