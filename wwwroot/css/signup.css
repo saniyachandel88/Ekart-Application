@@ -1,0 +1,79 @@
+﻿/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #4facfe, #ba64ec);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #555;
+}
+
+/* Signup Container */
+.signup-container {
+    background: #ddd;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Signup Form */
+.signup-form h2 {
+    margin-bottom: 1rem;
+    color: blueviolet;
+    font-weight: 500;
+}
+
+.signup-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+    .signup-form .form-group label {
+        font-weight: 500;
+        font-size: 0.9rem;
+        color: #555;
+    }
+
+.signup-form .form-control {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 0.9rem;
+}
+
+    .signup-form .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+/* Submit Button */
+.signup-form .btn {
+    font-size: 1rem;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+    .signup-form .btn:hover{
+      background-color:blueviolet;
+    }
+
+    /* Text Center */
+    .signup-form .text-muted {
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        color: #666;
+    }
+
+/* Link Styling */
+.signup-form a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+    .signup-form a:hover {
+        text-decoration: underline;
+    }

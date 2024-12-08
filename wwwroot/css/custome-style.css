@@ -1,0 +1,81 @@
+﻿/* Custom Styles for Ekart Supplier Form */
+body {
+    background-color: #f4f6f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-height: 10px;
+}
+
+.navbar {
+    background-color: #9e0cf3 !important;
+    box-shadow: 0 2px 4px #9e0cf3;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.container {
+    max-width: 500px;
+}
+
+#addSupplierForm {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 30px;
+    margin-top: 20px;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.form-control {
+    border-color: #bdc3c7;
+    transition: all 0.3s ease;
+}
+
+    .form-control:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 0.2rem rgba(52,152,219,0.25);
+    }
+
+.btn-primary {
+    background-color: #9e0cf3;
+    border-color: #3498db;
+    transition: all 0.3s ease;
+}
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+        border-color: #9e0cf3;
+    }
+
+/* Responsive Layout */
+@media (min-width: 768px) {
+    .row-cols-md-2 > * {
+        flex: 0 0 auto;
+        width: 50%;
+    }
+
+    .row-cols-md-2 {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
+/* Form Grid Layout */
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+    .form-row > .col {
+        flex: 1;
+        padding: 0 15px;
+        margin-bottom: 1rem;
+    }

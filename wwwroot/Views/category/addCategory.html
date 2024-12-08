@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekart - Create Category</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/Mansi/pages.css">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="#">Ekart</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/Views/product/Index.html">Product</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/Views/supplier/index.html">Supplier</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/Views/category/index.html">Category</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <div class="card card-custom">
+            <div class="card-body">
+                <h3 class="text-center mb-4">Create Category</h3>
+                <form id="createCategoryForm">
+                    <div class="mb-3">
+                        <label for="categoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="categoryName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="picture" class="form-label">Picture</label>
+                        <input type="file" class="form-control" id="picture" accept="image/*" required>
+                        <div id="picturePreview" class="mt-2"></div>
+                    </div>
+                    <button type="button" id="createCategoryBtn" class="btn btn-success w-100">Create Category</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+
+    <script>
+        // Check if the token exists in local storage
+        const token = localStorage.getItem("authToken");
+
+        // Check if the user is logged in
+        if (!token) {
+            alert("You must log in to access this feature.");
+            window.location.href = "/Views/Mansi/include/login.html"; // Redirect to login page
+        }
+
+        // Decode the token and check the user's role
+        const decodedToken = jwt_decode(token);
+        console.log('Decoded Token:', decodedToken); // Debugging: Log the decoded token
+
+        if (decodedToken.Role !== "admin") {
+            alert("Access denied. You do not have permission to perform this action.");
+            window.location.href = "/unauthorized.html"; // Redirect to unauthorized page
+        }
+
+        let pictureBase64 = ""; // Variable to store the Base64 string of the image
+        const validImageTypes = ["image/jpeg", "image/png", "image/gif"];
+        const maxSizeMB = 2; // Maximum size in MB
+
+        // Handle file input and convert to Base64
+        $("#picture").on("change", function () {
+            const file = this.files[0];
+
+            if (file) {
+                // Validate file type
+                if (!validImageTypes.includes(file.type)) {
+                    alert("Only JPG, PNG, or GIF files are allowed.");
+                    this.value = ""; // Clear the input
+                    $("#picturePreview").html("");
+                    return;
+                }
+
+                // Validate file size
+                if (file.size > maxSizeMB * 1024 * 1024) {
+                    alert(`File size should not exceed ${maxSizeMB} MB.`);
+                    this.value = ""; // Clear the input
+                    $("#picturePreview").html("");
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    pictureBase64 = e.target.result;
+                    $("#picturePreview").html(`<img src="${pictureBase64}" alt="Preview" class="img-thumbnail" style="max-width: 200px;">`);
+                };
+                reader.readAsDataURL(file); // Convert the file to Base64
+            } else {
+                pictureBase64 = "";
+                $("#picturePreview").html("");
+            }
+        });
+
+        // Handle create category button click event
+        $("#createCategoryBtn").click(function () {
+            const categoryName = $("#categoryName").val().trim();
+            const description = $("#description").val().trim();
+
+            // Validate required fields
+            if (!categoryName) {
+                alert("Category Name is required.");
+                return;
+            }
+
+            if (!pictureBase64) {
+                alert("Picture is required.");
+                return;
+            }
+
+            const newCategory = {
+                categoryName: categoryName,
+                description: description || null,
+                picture: pictureBase64, // Send the Base64 string of the image
+            };
+
+            console.log('Category Data:', newCategory); // Debugging: Check data being sent
+
+            // Send the category data to the API
+            $.ajax({
+                url: "https://localhost:7118/api/Category",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(newCategory),
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+                success: function (response) {
+                    alert(response.message || "Category added successfully.");
+                    $("#createCategoryForm")[0].reset(); // Reset the form
+                    $("#picturePreview").html(""); // Clear the preview
+                },
+                error: function (xhr) {
+                    console.error('Error Response:', xhr); // Debugging: Log the error response
+                    const errorMessage = xhr.responseJSON?.error || "Failed to create category.";
+                    const errorDetails = xhr.responseJSON?.details || "";
+                    alert(`${errorMessage}\n${errorDetails}`);
+                },
+            });
+        });
+    </script>
+</body>
+</html>

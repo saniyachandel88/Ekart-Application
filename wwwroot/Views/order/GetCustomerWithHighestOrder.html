@@ -1,0 +1,247 @@
+﻿<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer with Highest Order</title>-->
+<!-- Bootstrap CSS -->
+<!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom Colors */
+        body {
+            background-color: #C39898; /* Light rose for background */
+        }
+
+        .navbar {
+            background-color: #987070; /* Dark rose for navbar */
+        }
+
+        .navbar-brand, .nav-link {
+            color: white !important; /* White text for navbar */
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1); /* Make navbar toggler icon visible */
+        }
+
+        .card {
+            background-color: #C39898; /* Light rose for card background */
+            border: none; /* Remove card border */
+        }
+
+        .card-body {
+            color: #fff; /* White text inside card */
+        }
+
+        .btn-primary {
+            background-color: #987070; /* Dark rose for button background */
+            border-color: white; /* Button border color */
+        }
+
+            .btn-primary:hover {
+                background-color: white; /* Button hover background color */
+                border-color: #987070; /* Button hover border color */
+                color: #987070; /* Text color on hover */
+            }
+
+        .text-center {
+            color: #333; /* Text color for headings */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="/Views/index.html">Ekart</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>-->
+<!--<div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link text-white" href="/Views/Nishna/Product/newindex.html">Product</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="/Views/Nishna/Customer/Index.html">Customer</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="/Views/Nishna/Order/Index.html">Order</a>
+        </li>
+    </ul>
+</div>-->
+<!--</div>
+</nav>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Customer with Highest Order</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Find Customer with the Highest Order</h5>
+                    <button id="getHighestOrderBtn" class="btn btn-primary mt-3">Get Customer</button>
+                    <div id="orderResult" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+<!-- Bootstrap JS and JQuery -->
+<!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>-->
+<!-- Link to JavaScript -->
+<!--<script src="/js/Nishna/GetCustomerWithHighestOrder.js"></script>
+</body>
+</html>-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer with Highest Order</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <style>
+        /* Custom Colors */
+        body {
+            background-color: #C39898; /* Light rose for background */
+        }
+
+        .navbar {
+            background-color: #987070; /* Dark rose for navbar */
+        }
+
+        .navbar-brand, .nav-link {
+            color: white !important; /* White text for navbar */
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1); /* Make navbar toggler icon visible */
+        }
+
+        .card {
+            background-color: #C39898; /* Light rose for card background */
+            border: none; /* Remove card border */
+        }
+
+        .card-body {
+            color: #fff; /* White text inside card */
+        }
+
+        .btn-primary {
+            background-color: #987070; /* Dark rose for button background */
+            border-color: white; /* Button border color */
+        }
+
+            .btn-primary:hover {
+                background-color: white; /* Button hover background color */
+                border-color: #987070; /* Button hover border color */
+                color: #987070; /* Text color on hover */
+            }
+
+        .text-center {
+            color: #333; /* Text color for headings */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="/Views/index.html">Ekart</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Customer with Highest Order</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Find Customer with the Highest Order</h5>
+                        <button id="getHighestOrderBtn" class="btn btn-primary mt-3">Get Customer</button>
+                        <div id="orderResult" class="mt-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base URL for your API
+        const apiUrl = "https://localhost:7118/api/Order";
+
+        // Check if the token exists in local storage
+        const token = localStorage.getItem("authToken");
+
+        // Redirect to login if token is missing or invalid
+        if (!token) {
+            alert("You must log in to access this page.");
+            window.location.href = "/Views/Nishna/Login/Login.Html";
+        } else {
+            try {
+                const decodedToken = jwt_decode(token);
+                const currentTime = Math.floor(Date.now() / 1000);
+
+                // Check if the token has expired
+                if (decodedToken.exp < currentTime) {
+                    alert("Session expired. Please log in again.");
+                    localStorage.removeItem("authToken");
+                    window.location.href = "/Views/Nishna/Login/Login.Html";
+                }
+            } catch (error) {
+                alert("Invalid session. Please log in again.");
+                localStorage.removeItem("authToken");
+                window.location.href = "/Views/Nishna/Login/Login.Html";
+            }
+        }
+
+        // Function to Fetch the Customer with the Highest Order
+        function getCustomerWithHighestOrder() {
+            $.ajax({
+                url: `${apiUrl}/highest-order`, // Endpoint to get the customer with the highest order
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`, // Include the token in the request headers
+                },
+                success: function (response) {
+                    if (response && response.customerId) {
+                        $("#orderResult").html(`
+                                <div class="alert alert-success">
+                                    Customer with the highest order ID is: <strong>${response.customerId}</strong>
+                                </div>
+                            `);
+                    } else {
+                        $("#orderResult").html(`
+                                <div class="alert alert-warning">
+                                    No customer found with the highest number of orders.
+                                </div>
+                            `);
+                    }
+                },
+                error: function (xhr) {
+                    const errorMsg = xhr.responseJSON?.message || "Failed to fetch the customer with the highest order.";
+                    $("#orderResult").html(`
+                            <div class="alert alert-danger">
+                                ${errorMsg}
+                            </div>
+                        `);
+                }
+            });
+        }
+
+        // Initialize the AJAX request when the button is clicked
+        $(document).ready(function () {
+            $("#getHighestOrderBtn").on("click", function () {
+                getCustomerWithHighestOrder();
+            });
+        });
+    </script>
+</body>
+</html>

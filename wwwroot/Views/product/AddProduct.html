@@ -1,0 +1,318 @@
+﻿<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f3e8ff; /* Light lavender background */
+        }
+
+        .navbar {
+            background-color: #6a5acd; /* Dark lavender for navbar */
+        }
+
+        .navbar-brand, .nav-link {
+            color: #f3e8ff; /* Light lavender text */
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1); /* Ensures the icon is visible */
+        }
+
+        .form-label {
+            color: #4b0082; /* Deep lavender text for labels */
+        }
+
+        .form-control, .form-select {
+            background-color: #dcd6f7; /* Light lavender for input fields */
+            border: 1px solid #6a5acd; /* Dark lavender border */
+        }
+
+            .form-control:focus, .form-select:focus {
+                box-shadow: 0 0 5px #6a5acd;
+                border-color: #6a5acd;
+            }
+
+        .btn-primary {
+            background-color: #9370db; /* Medium lavender for button */
+            border: none;
+        }
+
+            .btn-primary:hover {
+                background-color: #8368b6; /* Slightly darker lavender on hover */
+            }
+
+        h1 {
+            color: #4b0082; /* Dark lavender */
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 800px;
+        }
+
+        .bg-white {
+            background-color: #ffffff !important; /* Ensure forms maintain a clean white background */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/Views/index.html">Ekart</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>-->
+<!--<div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="/Views/Nishna/Product/newindex.html">Product</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/Views/Nishna/Order/Index.html">Order</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/Views/Nishna/Customer/Index.html">Customer</a>
+        </li>
+    </ul>
+</div>-->
+<!--</div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Add New Product</h1>
+        <form id="addProductForm" class="p-4 border rounded bg-white">
+            <div class="mb-3">
+                <label for="productName" class="form-label">Product Name</label>
+                <input type="text" class="form-control" id="productName" name="productName" required>
+            </div>
+            <div class="mb-3">
+                <label for="supplierId" class="form-label">Supplier ID</label>
+                <input type="number" class="form-control" id="supplierId" name="supplierId">
+            </div>
+            <div class="mb-3">
+                <label for="categoryId" class="form-label">Category ID</label>
+                <input type="number" class="form-control" id="categoryId" name="categoryId">
+            </div>
+            <div class="mb-3">
+                <label for="quantityPerUnit" class="form-label">Quantity Per Unit</label>
+                <input type="text" class="form-control" id="quantityPerUnit" name="quantityPerUnit">
+            </div>
+            <div class="mb-3">
+                <label for="unitPrice" class="form-label">Unit Price</label>
+                <input type="number" class="form-control" id="unitPrice" name="unitPrice" step="0.01">
+            </div>
+            <div class="mb-3">
+                <label for="unitsInStock" class="form-label">Units In Stock</label>
+                <input type="number" class="form-control" id="unitsInStock" name="unitsInStock">
+            </div>
+            <div class="mb-3">
+                <label for="unitsOnOrder" class="form-label">Units On Order</label>
+                <input type="number" class="form-control" id="unitsOnOrder" name="unitsOnOrder">
+            </div>
+            <div class="mb-3">
+                <label for="reorderLevel" class="form-label">Reorder Level</label>
+                <input type="number" class="form-control" id="reorderLevel" name="reorderLevel">
+            </div>
+            <div class="mb-3">
+                <label for="discontinued" class="form-label">Discontinued</label>
+                <select class="form-select" id="discontinued" name="discontinued">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <button type="button" id="submitProduct" class="btn btn-primary w-100">Add Product</button>
+        </form>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/Nishna/Product.js"></script>
+</body>
+</html>-->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script> <!-- Add the JWT decode script -->
+    <style>
+        body {
+            background-color: #f3e8ff; /* Light lavender background */
+        }
+
+        .navbar {
+            background-color: #6a5acd; /* Dark lavender for navbar */
+        }
+
+        .navbar-brand, .nav-link {
+            color: #f3e8ff; /* Light lavender text */
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1); /* Ensures the icon is visible */
+        }
+
+        .form-label {
+            color: #4b0082; /* Deep lavender text for labels */
+        }
+
+        .form-control, .form-select {
+            background-color: #dcd6f7; /* Light lavender for input fields */
+            border: 1px solid #6a5acd; /* Dark lavender border */
+        }
+
+            .form-control:focus, .form-select:focus {
+                box-shadow: 0 0 5px #6a5acd;
+                border-color: #6a5acd;
+            }
+
+        .btn-primary {
+            background-color: #9370db; /* Medium lavender for button */
+            border: none;
+        }
+
+            .btn-primary:hover {
+                background-color: #8368b6; /* Slightly darker lavender on hover */
+            }
+
+        h1 {
+            color: #4b0082; /* Dark lavender */
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 800px;
+        }
+
+        .bg-white {
+            background-color: #ffffff !important; /* Ensure forms maintain a clean white background */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/Views/index.html">Ekart</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Add New Product</h1>
+        <form id="addProductForm" class="p-4 border rounded bg-white">
+            <div class="mb-3">
+                <label for="productName" class="form-label">Product Name</label>
+                <input type="text" class="form-control" id="productName" name="productName" required>
+            </div>
+            <div class="mb-3">
+                <label for="supplierId" class="form-label">Supplier ID</label>
+                <input type="number" class="form-control" id="supplierId" name="supplierId">
+            </div>
+            <div class="mb-3">
+                <label for="categoryId" class="form-label">Category ID</label>
+                <input type="number" class="form-control" id="categoryId" name="categoryId">
+            </div>
+            <div class="mb-3">
+                <label for="quantityPerUnit" class="form-label">Quantity Per Unit</label>
+                <input type="text" class="form-control" id="quantityPerUnit" name="quantityPerUnit">
+            </div>
+            <div class="mb-3">
+                <label for="unitPrice" class="form-label">Unit Price</label>
+                <input type="number" class="form-control" id="unitPrice" name="unitPrice" step="0.01">
+            </div>
+            <div class="mb-3">
+                <label for="unitsInStock" class="form-label">Units In Stock</label>
+                <input type="number" class="form-control" id="unitsInStock" name="unitsInStock">
+            </div>
+            <div class="mb-3">
+                <label for="unitsOnOrder" class="form-label">Units On Order</label>
+                <input type="number" class="form-control" id="unitsOnOrder" name="unitsOnOrder">
+            </div>
+            <div class="mb-3">
+                <label for="reorderLevel" class="form-label">Reorder Level</label>
+                <input type="number" class="form-control" id="reorderLevel" name="reorderLevel">
+            </div>
+            <div class="mb-3">
+                <label for="discontinued" class="form-label">Discontinued</label>
+                <select class="form-select" id="discontinued" name="discontinued">
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <button type="button" id="submitProduct" class="btn btn-primary w-100">Add Product</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Check if the token exists in local storage
+        const token = localStorage.getItem("authToken");
+
+        // Redirect to login if token is missing or invalid
+        if (!token) {
+            alert("You must log in to access this page.");
+            window.location.href = "/Views/Nishna/Login/Login.Html";
+        } else {
+            try {
+                const decodedToken = jwt_decode(token);
+                const currentTime = Math.floor(Date.now() / 1000);
+
+                if (decodedToken.exp < currentTime) {
+                    alert("Session expired. Please log in again.");
+                    localStorage.removeItem("authToken");
+                    window.location.href = "/Views/Nishna/Login/Login.Html";
+                }
+            } catch (error) {
+                alert("Invalid session. Please log in again.");
+                localStorage.removeItem("authToken");
+                window.location.href = "/Views/Nishna/Login/Login.Html";
+            }
+        }
+
+        $('#submitProduct').on('click', function () {
+            var formData = {
+                productName: $('#productName').val(),
+                supplierId: $('#supplierId').val(),
+                categoryId: $('#categoryId').val(),
+                quantityPerUnit: $('#quantityPerUnit').val(),
+                unitPrice: parseFloat($('#unitPrice').val()),
+                unitsInStock: parseInt($('#unitsInStock').val()),
+                unitsOnOrder: parseInt($('#unitsOnOrder').val()),
+                reorderLevel: parseInt($('#reorderLevel').val()),
+                discontinued: $('#discontinued').val() === 'true'
+            };
+
+            $.ajax({
+                url: "https://localhost:7118/api/Product/add",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                headers: {
+                    "Authorization": `Bearer ${token}`  // Include the token in the request headers
+                },
+                success: function (response) {
+                    alert(response.message);
+                },
+                error: function (xhr) {
+                    alert('Error: ' + xhr.responseText);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+

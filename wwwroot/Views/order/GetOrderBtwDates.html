@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Search</title>
+    <!-- Bootstrap CSS for table styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <h3>Search Orders by Date Range</h3>
+
+        <!-- Date range selection -->
+        <div class="form-group">
+            <label for="fromDate">From Date:</label>
+            <input type="date" id="fromDate" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="toDate">To Date:</label>
+            <input type="date" id="toDate" class="form-control">
+        </div>
+
+        <button id="getOrdersBtn" class="btn btn-primary">Get Orders</button>
+
+        <!-- Area to display the results -->
+        <div id="ordersResponse" class="mt-4"></div>
+    </div>
+
+    <!-- jQuery and Bootstrap JS for functionality -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Link to external JavaScript file -->
+    <script src="/js/GetOrderBtwDates.js"></script>
+
+</body>
+</html>

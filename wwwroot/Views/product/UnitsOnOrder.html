@@ -1,0 +1,263 @@
+﻿<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products By Units On Order</title>-->
+<!-- Bootstrap CSS -->
+<!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Matching theme with Get All Products */
+        body {
+            background-color: #f3e8ff; /* Light lavender background */
+        }
+
+        .navbar {
+            background-color: #6a5acd; /* Dark lavender for navbar */
+        }
+
+        .navbar-brand, .nav-link {
+            color: #f3e8ff; /* Light lavender text */
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1); /* Ensures the icon is visible */
+        }
+
+        h1 {
+            color: #4b0082; /* Dark lavender */
+            background-color: #6a5acd; /* Dark lavender background for heading */
+            font-weight: bold;
+        }
+
+        .table thead {
+            background-color: #6a5acd; /* Dark lavender for table header */
+            color: #f3e8ff; /* Light lavender text */
+        }
+
+        /* Matching the colors from "Get All Products" */
+        .table-striped tbody tr:nth-child(odd) {
+            background-color: #dcd6f7; /* Light lavender for odd rows */
+        }
+
+        .table-striped tbody tr:nth-child(even) {
+            background-color: #f3e8ff; /* Lighter lavender for even rows */
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #c2bdf4; /* Slightly darker lavender for hover */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="/Views/index.html">Ekart</a>-->
+<!--<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+</button>-->
+<!--<div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link text-white" href="/Views/Nishna/Product/newindex.html">Product</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="/Views/Nishna/Customer/Index.html">Customer</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="/Views/Nishna/Order/Index.html">Order</a>
+        </li>
+    </ul>
+</div>-->
+<!--</div>
+</nav>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Products By Units On Order</h1>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Unit Price</th>
+                <th>Units On Order</th>
+            </tr>
+        </thead>
+        <tbody id="productTableBody">-->
+<!-- Product data will be injected here -->
+<!--</tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/Nishna/UnitsonOrder.js"></script>
+</body>
+</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products By Units On Order</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Matching theme with Get All Products */
+        body {
+            background-color: #f3e8ff; /* Light lavender background */
+        }
+
+        .navbar {
+            background-color: #6a5acd; /* Dark lavender for navbar */
+        }
+
+        .navbar-brand, .nav-link {
+            color: #f3e8ff; /* Light lavender text */
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1); /* Ensures the icon is visible */
+        }
+
+        h1 {
+            color: #4b0082; /* Dark lavender */
+            background-color: #6a5acd; /* Dark lavender background for heading */
+            font-weight: bold;
+        }
+
+        .table thead {
+            background-color: #6a5acd; /* Dark lavender for table header */
+            color: #f3e8ff; /* Light lavender text */
+        }
+
+        /* Matching the colors from "Get All Products" */
+        .table-striped tbody tr:nth-child(odd) {
+            background-color: #dcd6f7; /* Light lavender for odd rows */
+        }
+
+        .table-striped tbody tr:nth-child(even) {
+            background-color: #f3e8ff; /* Lighter lavender for even rows */
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #c2bdf4; /* Slightly darker lavender for hover */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="/Views/index.html">Ekart</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Products By Units On Order</h1>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Unit Price</th>
+                    <th>Units On Order</th>
+                </tr>
+            </thead>
+            <tbody id="productTableBody">
+                <!-- Product data will be injected here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+
+    <script>
+        const apiUrl = "https://localhost:7118/api/Product/UnitsOnOrder"; // API URL
+
+        // Function to decode the token and validate session
+        function validateToken() {
+            const token = localStorage.getItem("authToken");
+
+            if (!token) {
+                alert("You must log in to access this page.");
+                window.location.href = "/Views/Nishna/Login/Login.Html";
+                return null;
+            }
+
+            try {
+                const decodedToken = jwt_decode(token);
+                const currentTime = Math.floor(Date.now() / 1000);
+
+                // Check if the token has expired
+                if (decodedToken.exp < currentTime) {
+                    alert("Session expired. Please log in again.");
+                    localStorage.removeItem("authToken");
+                    window.location.href = "/Views/Nishna/Login/Login.Html";
+                    return null;
+                }
+
+                return token; // Token is valid, return it
+            } catch (error) {
+                alert("Invalid session. Please log in again.");
+                localStorage.removeItem("authToken");
+                window.location.href = "/Views/Nishna/Login/Login.Html";
+                return null;
+            }
+        }
+
+        // Function to Fetch and Display Products with UnitsOnOrder > 0
+        function getProductsByUnitsOnOrder() {
+            const token = validateToken(); // Validate the token before making API call
+
+            if (!token) return; // If token is invalid or expired, stop the API call
+
+            $.ajax({
+                url: apiUrl, // API endpoint to fetch products
+                method: "GET",
+                headers: {
+                    "Authorization": "Bearer " + token, // Include the token in the request headers
+                },
+                success: function (response) {
+                    let productTableBody = "";
+
+                    // Loop through the products and create table rows
+                    response.forEach((product) => {
+                        productTableBody += `
+                                <tr>
+                                    <td>${product.productId}</td>
+                                    <td>${product.productName}</td>
+                                    <td>${product.unitPrice}</td>
+                                    <td>${product.unitsOnOrder}</td>
+                                </tr>
+                            `;
+                    });
+
+                    // Inject the generated rows into the table body
+                    $("#productTableBody").html(productTableBody);
+                },
+                error: function (xhr) {
+                    const errorMsg = xhr.responseJSON?.message || "Failed to fetch product data.";
+                    $("#productTableBody").html(`
+                            <tr>
+                                <td colspan="8" class="text-center text-danger">${errorMsg}</td>
+                            </tr>
+                        `);
+                }
+            });
+        }
+
+        // Initialize the AJAX request when the page is loaded
+        $(document).ready(function () {
+            getProductsByUnitsOnOrder();
+        });
+    </script>
+</body>
+</html>
+

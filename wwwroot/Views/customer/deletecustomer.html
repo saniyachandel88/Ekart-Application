@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer List</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/Mansi/pages.css" />
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="/Views/index.html">Ekart</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/Views/product/index.html">Product</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/Views/Customer/Customer.html">Customer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/Views/order/index.html">Order</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="card card-custom">
+            <div class="card-body">
+                <h3 class="text-center mb-4">Customer List</h3>
+                <button id="fetchCustomersBtn" class="btn btn-primary mb-3">Fetch Customers</button>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Company Name</th>
+                                <th>Contact Name</th>
+                                <th>Phone</th>
+                                <th>City</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTableBody">
+                            <!-- Customer data will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script>
+     
+          
+        const token = localStorage.getItem("authToken");
+
+        if (!token) {
+            alert("You must log in to access this feature.");
+            window.location.href = "/Views/Mansi/include/login.html";
+        }
+
+        let decodedToken;
+        try {
+            decodedToken = jwt_decode(token);
+            if (decodedToken.Role !== "admin") {
+                alert("Access denied. You do not have permission to perform this action.");
+                window.location.href = "/unauthorized.html";
+            }
+        } catch (error) {
+            alert("Invalid token. Please log in again.");
+            window.location.href = "/Views/Mansi/include/login.html";
+        }
+
+        // API URL
+        const apiUrl = "https://localhost:7118/api/Customer";
+
+        // Show or hide loader
+        function showLoader(isLoading, element) {
+            if (isLoading) {
+                element.prop("disabled", true).text("Processing...");
+            } else {
+                element.prop("disabled", false).text("Delete");
+            }
+        }
+
+        // Fetch and display customers
+        function fetchCustomers() {
+            $("#fetchCustomersBtn").prop("disabled", true).text("Loading...");
+            $.ajax({
+                url: apiUrl,
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+                success: function (response) {
+                    let tableBody = "";
+                    response.forEach((customer) => {
+                        tableBody += `
+                    <tr id="customer-row-${customer.customerId}">
+                        <td>${customer.customerId}</td>
+                        <td>${customer.companyName}</td>
+                        <td>${customer.contactName}</td>
+                        <td>${customer.phone}</td>
+                        <td>${customer.city}</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm delete-customer" data-customer-id="${customer.customerId}">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                    });
+                    $("#customerTableBody").html(tableBody);
+                },
+                error: function (xhr) {
+                    console.error("Error fetching customers:", xhr);
+                    const errorMessage = xhr.responseJSON?.message || "Failed to fetch customers.";
+                    alert(errorMessage);
+                },
+                complete: function () {
+                    $("#fetchCustomersBtn").prop("disabled", false).text("Fetch Customers");
+                },
+            });
+        }
+
+        // Initial fetch of customers
+        fetchCustomers();
+
+        // Event delegation for delete button
+        $(document).on("click", ".delete-customer", function () {
+            const customerId = $(this).data("customer-id");
+            const deleteButton = $(this); // Reference the clicked button
+
+            if (confirm(`Are you sure you want to delete customer with ID ${customerId}?`)) {
+                showLoader(true, deleteButton); // Show loader for the button
+                $.ajax({
+                    url: `${apiUrl}/${customerId}`,
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                    },
+                    success: function () {
+                        alert("Customer deleted successfully");
+                        $(`#customer-row-${customerId}`).remove(); // Remove the row dynamically
+                    },
+                    error: function (xhr) {
+                        console.error("Error deleting customer:", xhr);
+                        const errorMessage = xhr.responseJSON?.message || "Failed to delete customer.";
+                        alert(errorMessage);
+                    },
+                    complete: function () {
+                        showLoader(false, deleteButton); // Revert the button state
+                    },
+                });
+            }
+        });
+
+</script>
+
+</body>
+</html>
