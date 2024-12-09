@@ -179,7 +179,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
 
     <script>
-        const apiUrl = "https://localhost:7118/api/Product/DiscontinuedProduct"; // API URL
+        const apiUrl = "https://localhost:7179/api/Product/DiscontinuedProduct"; // API URL
 
         // Check if the token exists in local storage
         const token = localStorage.getItem("authToken");
@@ -187,7 +187,7 @@
         // Redirect to login if token is missing or invalid
         if (!token) {
             alert("You must log in to access this page.");
-            window.location.href = "/Views/Nishna/Login/Login.Html";
+            window.location.href = "/Views/include/login.html";
         } else {
             try {
                 // Decode the token
@@ -198,7 +198,7 @@
                 if (decodedToken.exp < currentTime) {
                     alert("Session expired. Please log in again.");
                     localStorage.removeItem("authToken");
-                    window.location.href = "/Views/Nishna/Login/Login.Html";
+                    window.location.href = "/Views/include/login.html";
                 }
             } catch (error) {
                 alert("Invalid session. Please log in again.");

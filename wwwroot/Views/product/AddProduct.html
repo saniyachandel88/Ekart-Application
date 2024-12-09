@@ -264,7 +264,7 @@
         // Redirect to login if token is missing or invalid
         if (!token) {
             alert("You must log in to access this page.");
-            window.location.href = "/Views/Nishna/Login/Login.Html";
+            window.location.href = "/Views/include/login.html";
         } else {
             try {
                 const decodedToken = jwt_decode(token);
@@ -273,12 +273,12 @@
                 if (decodedToken.exp < currentTime) {
                     alert("Session expired. Please log in again.");
                     localStorage.removeItem("authToken");
-                    window.location.href = "/Views/Nishna/Login/Login.Html";
+                    window.location.href = "/Views/include/login.html";
                 }
             } catch (error) {
                 alert("Invalid session. Please log in again.");
                 localStorage.removeItem("authToken");
-                window.location.href = "/Views/Nishna/Login/Login.Html";
+                window.location.href = "/Views/include/login.html";
             }
         }
 
@@ -296,7 +296,7 @@
             };
 
             $.ajax({
-                url: "https://localhost:7118/api/Product/add",
+                url: "https://localhost:7179/api/Product/add",
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(formData),

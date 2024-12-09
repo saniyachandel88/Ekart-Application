@@ -1,0 +1,139 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <style>
+        /* Custom colors */
+        .navbar {
+            background-color: #F7B5CA; /* Pastel pink (light rose) */
+        }
+
+        .navbar-nav .nav-link {
+            color: white !important; /* White text for nav links */
+        }
+
+        .navbar-brand {
+            color: white !important; /* White text for brand */
+        }
+
+        .table-striped tbody tr:nth-child(odd) {
+            background-color: #FFC6C6; /* Light rose color for odd rows */
+        }
+
+        .table-striped tbody tr:nth-child(even) {
+            background-color: #F7B5CA; /* Light rose color for even rows */
+        }
+
+        .bg-light {
+            background-color: #FFC6C6 !important; /* Light rose for the background */
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/Views/index.html">Ekart</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+          
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Customer List</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Company Name</th>
+                    <th>Contact Name</th>
+                    <th>Phone</th>
+                    <th>City</th>
+                </tr>
+            </thead>
+            <tbody id="customerTableBody">
+                <!-- Data will be injected here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const apiUrl = "https://localhost:7179/api/Customer"; // API URL
+
+        // Check if the token exists in local storage
+        const token = localStorage.getItem("authToken");
+
+        // Redirect to login if token is missing or invalid
+        if (!token) {
+            alert("You must log in to access this page.");
+            window.location.href = "/Views/include/login.html";
+        } else {
+            try {
+                const decodedToken = jwt_decode(token);
+                const currentTime = Math.floor(Date.now() / 1000);
+
+                if (decodedToken.exp < currentTime) {
+                    alert("Session expired. Please log in again.");
+                    localStorage.removeItem("authToken");
+                    window.location.href = "/Views/include/login.html";
+                }
+            } catch (error) {
+                alert("Invalid session. Please log in again.");
+                localStorage.removeItem("authToken");
+                window.location.href = "/Views/include/login.html";
+            }
+        }
+
+        // Function to Fetch and Display All Customers
+        function getCustomers() {
+            $.ajax({
+                url: apiUrl, // Endpoint to get all customers
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`, // Include the token in the request headers
+                },
+                success: function (response) {
+                    let customerTableBody = "";
+
+                    // Loop through the customers and create table rows
+                    response.forEach((customer) => {
+                        customerTableBody += `
+                                    <tr>
+                                        <td>${customer.customerId}</td>
+                                        <td>${customer.companyName}</td>
+                                        <td>${customer.contactName}</td>
+                                        <td>${customer.phone}</td>
+                                        <td>${customer.city}</td>
+                                    </tr>
+                                `;
+                    });
+
+                    // Inject the generated rows into the table body
+                    $("#customerTableBody").html(customerTableBody);
+                },
+                error: function (xhr) {
+                    const errorMsg = xhr.responseJSON?.message || "Failed to fetch customer data.";
+                    $("#customerTableBody").html(`
+                                <tr>
+                                    <td colspan="5" class="text-center text-danger">${errorMsg}</td>
+                                </tr>
+                            `);
+                }
+            });
+        }
+
+        // Initialize the AJAX request when the page is loaded
+        $(document).ready(function () {
+            getCustomers();
+        });
+    </script>
+</body>
+</html>

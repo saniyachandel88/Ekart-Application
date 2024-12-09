@@ -4,6 +4,9 @@ namespace Ekart_web_Application.DTO
 {
     public class UpdateSupplierDtoM
     {
+        [Required(ErrorMessage = "Supplier ID is required.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Supplier ID must be a positive number.")]
+        public int SupplierId { get; set; }
         [StringLength(200, ErrorMessage = "Address cannot exceed 200 characters.")]
         public string? Address { get; set; }
 

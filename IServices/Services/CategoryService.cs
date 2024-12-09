@@ -10,14 +10,15 @@ namespace Ekart_Application.IServices.Services
     {
         private readonly EkartProjectContext _context;
         private readonly IMapper _mapper;
-        private readonly ILogger<CategoryService> _logger;
-        public CategoryService(EkartProjectContext context, IMapper mapper, ILogger<CategoryService> logger)
+
+        public CategoryService(EkartProjectContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _logger = logger;
+
 
         }
+
         public async Task<CategoryCreateDto> CreateCategory(CategoryCreateDto categoryCreateDto)
         {
             try
@@ -27,7 +28,6 @@ namespace Ekart_Application.IServices.Services
 
                 // Convert picture to byte array
                 byte[]? pictureBytes = categoryCreateDto.GetPictureBytes();
-
                 if (pictureBytes == null || pictureBytes.Length == 0)
                     throw new ArgumentException("Picture is required and must be valid Base64 data");
 
@@ -48,17 +48,65 @@ namespace Ekart_Application.IServices.Services
 
                 return _mapper.Map<CategoryCreateDto>(category);
             }
-            catch (DbUpdateException dbEx)
+            catch (ArgumentNullException ex)
             {
-                _logger.LogError(dbEx, "Database error while creating category");
-                throw new Exception("Database error occurred.", dbEx);
+                throw new ArgumentException("Category data cannot be null.", ex);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException("Invalid category data.", ex);
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new InvalidOperationException("Category already exists.", ex);
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("Error while saving data to the database.", ex);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while creating category");
-                throw;
+                throw new Exception("An unexpected error occurred.", ex);
             }
         }
+
+        //public async Task<CategoryCreateDto> CreateCategory(CategoryCreateDto categoryCreateDto)
+        //{
+        //    try
+        //    {
+        //        if (categoryCreateDto == null)
+        //            throw new ArgumentNullException(nameof(categoryCreateDto), "Category cannot be null");
+
+        //        // Convert picture to byte array
+        //        byte[]? pictureBytes = categoryCreateDto.GetPictureBytes();
+
+        //        if (pictureBytes == null || pictureBytes.Length == 0)
+        //            throw new ArgumentException("Picture is required and must be valid Base64 data");
+
+        //        // Check for duplicate category name
+        //        var existingCategory = await _context.Categories
+        //            .FirstOrDefaultAsync(c => c.CategoryName.ToLower() == categoryCreateDto.CategoryName.ToLower());
+
+        //        if (existingCategory != null)
+        //            throw new InvalidOperationException("A category with this name already exists");
+
+        //        // Map DTO to domain model
+        //        var category = _mapper.Map<Category>(categoryCreateDto);
+        //        category.Picture = pictureBytes;
+
+        //        // Add to context and save changes
+        //        _context.Categories.Add(category);
+        //        await _context.SaveChangesAsync();
+
+        //        return _mapper.Map<CategoryCreateDto>(category);
+        //    }
+        //    catch (DbUpdateException dbEx)
+        //    {
+
+        //        throw new Exception("Database error occurred.", dbEx);
+        //    }
+
+        //}
 
 
 
@@ -79,7 +127,7 @@ namespace Ekart_Application.IServices.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching categories");
+
                 throw new Exception("An error occurred while fetching categories. Please try again later.");
             }
         }
@@ -127,5 +175,6 @@ namespace Ekart_Application.IServices.Services
 
             return true;
         }
+
     }
 }

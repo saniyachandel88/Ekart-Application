@@ -59,7 +59,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
-    <script>
+    <!--<script>
         $(document).ready(function () {
             const token = localStorage.getItem("authToken");
 
@@ -136,6 +136,135 @@
             }
         });
 
+    </script>-->
+    <script>
+        $(document).ready(function () {
+            const token = localStorage.getItem("authToken");
+
+            // Check for token presence
+            if (!token) {
+                alert("You must log in to access this feature.");
+                window.location.href = "/Views/Mansi/include/login.html";
+                return;
+            }
+
+            let decodedToken;
+            try {
+                // Decode token and check role
+                decodedToken = jwt_decode(token);
+                if (decodedToken.Role !== "admin") {
+                    alert("Access denied. You do not have permission to perform this action.");
+                    window.location.href = "/unauthorized.html";
+                    return;
+                }
+            } catch (error) {
+                alert("Invalid token. Please log in again.");
+                window.location.href = "/Views/Mansi/include/login.html";
+                return;
+            }
+
+            // Handle Update Supplier Button Click
+            $("#updateSupplierBtn").click(function () {
+                debugger;
+                const supplierId = $("#supplierId").val().trim();
+                const address = $("#address").val().trim();
+                const city = $("#city").val().trim();
+                const postalCode = $("#postalCode").val().trim();
+                const country = $("#country").val().trim();
+                console.log(token);
+                // Validate Supplier ID
+                if (!supplierId || supplierId <= 0) {
+                    alert("Please enter a valid Supplier ID.");
+                    return;
+                }
+
+                // Validate Postal Code format
+                const postalCodePattern = /^\d{5}(-\d{4})?$/;
+                if (postalCode && !postalCode.match(postalCodePattern)) {
+                    alert("Invalid postal code format. It should be '12345' or '12345-6789'.");
+                    return;
+                }
+
+                // Prepare update data
+                const updateSupplierDto = {
+                    supplierId:supplierId,
+                    address: address || null,
+                    city: city || null,
+                    postalCode: postalCode || null,
+                    country: country || null,
+                };
+
+                // Log the data being sent for debugging
+                console.log("Sending update request:", updateSupplierDto);
+
+                // Call Update Supplier function
+                updateSupplier(supplierId, updateSupplierDto,token);
+            });
+
+            function updateSupplier(supplierId, updateData, token) {
+                console.log(token);
+                $.ajax({
+                    url: `https://localhost:7179/api/Supplier/UpdateSupplier?id=${supplierId}`, // Correct template literal usage with supplierId
+                    method: "PUT", // HTTP method
+                    contentType: "application/json", // Send JSON data
+                    headers: {
+                        "Authorization": `Bearer ${token}`, // Include token in request headers
+                    },
+                    data: JSON.stringify(updateData), // Convert JavaScript object to JSON
+                    success: function () {
+                        alert("Supplier updated successfully.");
+                        console.log("Update successful for supplier ID:", supplierId);
+                        $("#updateSupplierForm")[0].reset();
+                    },
+                    error: function (xhr) {
+                        console.error("Error details:", xhr);
+                        const errorMsg = xhr.responseJSON?.message || "Failed to update supplier.";
+                        alert(`Error: ${errorMsg}`);
+                    }
+                });
+            }
+
+        //    function updateSupplier(supplierId, updateData) {
+        //    //    $.ajax({
+        //    //        url: `https://localhost:7179/api/UpdateSupplier/${supplierId}`, // Correct template literal usage
+        //    //        method: "PUT", // HTTP method
+        //    //        contentType: "application/json", // Send JSON data
+        //    //        headers: {
+        //    //            "Authorization": `Bearer ${token}`, // Include token in request headers
+        //    //        },
+        //    //        data: JSON.stringify(updateData), // Convert JavaScript object to JSON
+        //    //        success: function () {
+        //    //            alert("Supplier updated successfully.");
+        //    //            console.log("Update successful for supplier ID:", supplierId);
+        //    //            $("#updateSupplierForm")[0].reset();
+        //    //        },
+        //    //        error: function (xhr) {
+        //    //            console.error("Error details:", xhr);
+        //    //            const errorMsg = xhr.responseJSON?.message || "Failed to update supplier.";
+        //    //            alert(`Error: ${errorMsg}`);
+        //    //        },
+        //    //    });
+        //        //}
+        //        $.ajax({
+        //            url: `https://localhost:7179/api/UpdateSupplier/${supplierId}`, // Correct template literal usage with supplierId
+        //            method: "PUT", // HTTP method
+        //            contentType: "application/json", // Send JSON data
+        //            headers: {
+        //                "Authorization": `Bearer ${token}`, // Include token in request headers
+        //            },
+        //            data: JSON.stringify(updateData), // Convert JavaScript object to JSON
+        //            success: function () {
+        //                alert("Supplier updated successfully.");
+        //                console.log("Update successful for supplier ID:", supplierId);
+        //                $("#updateSupplierForm")[0].reset();
+        //            },
+        //            error: function (xhr) {
+        //                console.error("Error details:", xhr);
+        //                const errorMsg = xhr.responseJSON?.message || "Failed to update supplier.";
+        //                alert(`Error: ${errorMsg}`);
+        //            },
+                
+        });
     </script>
 
 </body>

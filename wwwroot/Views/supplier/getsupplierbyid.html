@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center">Supplier Management</h2>
+        <div class="row mb-3">
+            <div class="col-md-4 offset-md-4">
+                <input type="text" id="supplierIdInput" class="form-control" placeholder="Enter Supplier ID">
+                <button id="getSupplierByIdBtn" class="btn btn-primary mt-2 btn-block">Get Supplier By ID</button>
+            </div>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Company Name</th>
+                    <th>Contact Name</th>
+                    <th>Contact Title</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Region</th>
+                    <th>Postal Code</th>
+                    <th>Country</th>
+                    <th>Phone</th>
+                    <th>Fax</th>
+                </tr>
+            </thead>
+            <tbody id="supplierTableBody">
+                <tr>
+                    <td colspan="10" class="text-center">No data available.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/js/supplierbyid.js"></script>
+</body>
+</html>

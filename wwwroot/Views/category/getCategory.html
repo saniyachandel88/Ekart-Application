@@ -98,13 +98,13 @@
                     let tableBody = "";
                     response.forEach((category) => {
                         tableBody += `
-                                <tr>
-                                    <td>${category.categoryId}</td>
-                                    <td>${category.categoryName}</td>
-                                    <td>${category.description}</td>
-                                    <td>${category.productCount}</td>
-                                </tr>
-                            `;
+                                    <tr>
+                                        <td>${category.categoryId}</td>
+                                        <td>${category.categoryName}</td>
+                                        <td>${category.description}</td>
+                                        <td>${category.productCount}</td>
+                                    </tr>
+                                `;
                     });
                     $("#categoriesTableBody").html(tableBody);
                 },

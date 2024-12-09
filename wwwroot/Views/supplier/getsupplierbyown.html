@@ -1,0 +1,191 @@
+﻿<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Details</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+</head>
+<body>
+    <h1>Supplier Profile</h1>
+
+    <div id="supplierDetails">
+        <p><strong>Company Name:</strong> <span id="companyName"></span></p>
+        <p><strong>Contact Name:</strong> <span id="contactName"></span></p>
+        <p><strong>Email:</strong> <span id="email"></span></p>
+        <p><strong>Contact Title:</strong> <span id="contactTitle"></span></p>
+        <p><strong>Address:</strong> <span id="address"></span></p>
+        <p><strong>City:</strong> <span id="city"></span></p>
+        <p><strong>Region:</strong> <span id="region"></span></p>
+        <p><strong>Postal Code:</strong> <span id="postalCode"></span></p>
+        <p><strong>Country:</strong> <span id="country"></span></p>
+        <p><strong>Phone:</strong> <span id="phone"></span></p>
+        <p><strong>Fax:</strong> <span id="fax"></span></p>
+        <p><strong>Home Page:</strong> <span id="homePage"></span></p>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Decode JWT to extract supplierId
+            function getSupplierIdFromToken() {
+                const authToken = localStorage.getItem('authToken'); // Retrieve token from localStorage
+                if (!authToken) {
+                    alert("No auth token found. Please log in.");
+                    window.location.href = "/Views/include/login.html";
+                    return null;
+                }
+
+                try {
+                    const decodedToken = jwt_decode(authToken); // Decode the token
+                    return decodedToken.Id; // Assuming 'Id' is the key for supplierId
+                } catch (error) {
+                    console.error("Invalid token:", error);
+                    alert("Invalid token. Please log in again.");
+                    return null;
+                }
+            }
+
+            // Fetch supplier details
+            function fetchSupplierDetails() {
+                const supplierId = getSupplierIdFromToken();
+                if (!supplierId) return; // Stop if supplierId is null
+
+                $.ajax({
+                    url: `https://localhost:7179/api/Supplier/profile`, // API endpoint to fetch supplier details
+                    type: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}` // Add Authorization header
+                    },
+                    success: function (data) {
+                        // Populate the page with supplier details
+                        $("#companyName").text(data.companyName || "N/A");
+                        $("#contactName").text(data.contactName || "N/A");
+                        $("#email").text(data.email || "N/A");
+                        $("#contactTitle").text(data.contactTitle || "N/A");
+                        $("#address").text(data.address || "N/A");
+                        $("#city").text(data.city || "N/A");
+                        $("#region").text(data.region || "N/A");
+                        $("#postalCode").text(data.postalCode || "N/A");
+                        $("#country").text(data.country || "N/A");
+                        $("#phone").text(data.phone || "N/A");
+                        $("#fax").text(data.fax || "N/A");
+                        $("#homePage").text(data.homePage || "N/A");
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching supplier details:", xhr.responseText, status, error);
+                        alert("Unable to fetch supplier details. Error: " + xhr.status + " " + xhr.statusText);
+                    }
+                });
+            }
+
+            // Fetch and display supplier details
+            fetchSupplierDetails();
+        });
+    </script>
+</body>
+</html>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card shadow border-0">
+            <div class="card-header bg-primary text-white text-center">
+                <h2>Supplier Profile</h2>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p><strong>Company Name:</strong> <span id="companyName">N/A</span></p>
+                        <p><strong>Contact Name:</strong> <span id="contactName">N/A</span></p>
+                        <p><strong>Email:</strong> <span id="email">N/A</span></p>
+                        <p><strong>Contact Title:</strong> <span id="contactTitle">N/A</span></p>
+                        <p><strong>Address:</strong> <span id="address">N/A</span></p>
+                        <p><strong>City:</strong> <span id="city">N/A</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Region:</strong> <span id="region">N/A</span></p>
+                        <p><strong>Postal Code:</strong> <span id="postalCode">N/A</span></p>
+                        <p><strong>Country:</strong> <span id="country">N/A</span></p>
+                        <p><strong>Phone:</strong> <span id="phone">N/A</span></p>
+                        <p><strong>Fax:</strong> <span id="fax">N/A</span></p>
+                        <p><strong>Home Page:</strong> <span id="homePage">N/A</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-center bg-light">
+                <button class="btn btn-primary" onclick="location.reload()">Refresh Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Decode JWT to extract supplierId
+            function getSupplierIdFromToken() {
+                const authToken = localStorage.getItem('authToken'); // Retrieve token from localStorage
+                if (!authToken) {
+                    alert("No auth token found. Please log in.");
+                    window.location.href = "/Views/include/login.html";
+                    return null;
+                }
+
+                try {
+                    const decodedToken = jwt_decode(authToken); // Decode the token
+                    return decodedToken.Id; // Assuming 'Id' is the key for supplierId
+                } catch (error) {
+                    console.error("Invalid token:", error);
+                    alert("Invalid token. Please log in again.");
+                    return null;
+                }
+            }
+
+            // Fetch supplier details
+            function fetchSupplierDetails() {
+                const supplierId = getSupplierIdFromToken();
+                if (!supplierId) return; // Stop if supplierId is null
+
+                $.ajax({
+                    url: `https://localhost:7179/api/Supplier/profile`, // API endpoint to fetch supplier details
+                    type: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('authToken')}` // Add Authorization header
+                    },
+                    success: function (data) {
+                        // Populate the page with supplier details
+                        $("#companyName").text(data.companyName || "N/A");
+                        $("#contactName").text(data.contactName || "N/A");
+                        $("#email").text(data.email || "N/A");
+                        $("#contactTitle").text(data.contactTitle || "N/A");
+                        $("#address").text(data.address || "N/A");
+                        $("#city").text(data.city || "N/A");
+                        $("#region").text(data.region || "N/A");
+                        $("#postalCode").text(data.postalCode || "N/A");
+                        $("#country").text(data.country || "N/A");
+                        $("#phone").text(data.phone || "N/A");
+                        $("#fax").text(data.fax || "N/A");
+                        $("#homePage").text(data.homePage || "N/A");
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching supplier details:", xhr.responseText, status, error);
+                        alert("Unable to fetch supplier details. Error: " + xhr.status + " " + xhr.statusText);
+                    }
+                });
+            }
+
+            // Fetch and display supplier details
+            fetchSupplierDetails();
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,307 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <!--Bootstrap
+    CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<style>
+    /* Custom Navbar Styles */
+    .navbar {
+        background-color: #6f42c1 !important; /* Purple navbar */
+    }
+
+    .navbar-brand, .nav-link {
+        color: white !important;
+    }
+
+    .navbar-toggler-icon {
+        background-color: white;
+    }
+
+    /* Table Styling */
+    th, td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    /* Zebra Striping for Table Rows */
+    tr:nth-child(odd) {
+        background-color: #f9f9fb;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f1f1f1;
+    }
+
+    /* Hover Effect for Table Rows */
+    tr:hover {
+        background-color: #e3e3e3;
+    }
+
+    /* Button Customization */
+    .btn-purple {
+        background-color: #6f42c1;
+        color: white;
+        border-radius: 5px;
+        font-weight: 600;
+        padding: 10px 20px;
+    }
+
+        .btn-purple:hover {
+            background-color: #5a2d9c; /* Darker purple on hover */
+            color: white;
+        }
+
+    .input-group input {
+        border-radius: 5px;
+    }
+
+    .input-group button {
+        border-radius: 5px;
+    }
+</style>
+</head>
+<body class="bg-light">
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Ekart</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+        </div>
+    </nav>
+    <!--Main Content-->
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Product List</h1>
+        Filter Form
+        <form id="filterForm" class="mb-4">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="number" id="unitInStockInput" class="form-control" placeholder="Enter Units in Stock" required>
+                        <button type="submit" class="btn btn-purple">Filter</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!--Product Table-->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Unit Price</th>
+                    <th>Units in Stock</th>
+                </tr>
+            </thead>
+            <tbody id="productTableBody">
+                <!--Product data will be injected here-->
+            </tbody>
+        </table>
+    </div>
+    <!--Bootstrap JS and JQuery-->
+    <!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                const apiUrl = "https://localhost:7117/api/Product";
+
+                // Function to Fetch and Display Products by Units in Stock
+                function getProductsByUnitInStock(unitInStock) {
+                    const token = localStorage.getItem('jwtToken'); // Retrieve token stored during login
+
+                    // Check if the user is logged in
+                    if (!token) {
+                        $("#productTableBody").html(`
+                            <tr>
+                                <td colspan="5" class="text-center text-danger">You must be logged in to fetch products.</td>
+                            </tr>
+                        `);
+                        return; // Stop further execution if no token
+                    }
+
+                    // Make AJAX GET request
+                    $.ajax({
+                        url: `${apiUrl}/UnitInStock/${unitInStock}`, // Endpoint to get products by unit in stock
+                        method: "GET",
+                        headers: {
+                            'Authorization': `Bearer ${token}` // Pass token in the Authorization header
+                        },
+                        success: function (response) {
+                            let productTableBody = "";
+
+                            // Check if response has data
+                            if (response && response.length > 0) {
+                                // Loop through the products and create table rows
+                                response.forEach((product) => {
+                                    productTableBody += `
+                                        <tr>
+                                            <td>${product.productId}</td>
+                                            <td>${product.productName}</td>
+                                            <td>${product.unitPrice}</td>
+                                            <td>${product.unitsInStock}</td>
+                                        </tr>
+                                    `;
+                                });
+                            } else {
+                                productTableBody = `
+                                    <tr>
+                                        <td colspan="5" class="text-center text-warning">No products found for the given Units in Stock.</td>
+                                    </tr>
+                                `;
+                            }
+
+                            // Inject the generated rows into the table body
+                            $("#productTableBody").html(productTableBody);
+                        },
+                        error: function (xhr) {
+                            console.error("Error fetching data:", xhr.status, xhr.responseText);
+                            let errorMsg = "Failed to fetch product data.";
+
+                            // Check if the error response has a message
+                            if (xhr.status === 401) {
+                                errorMsg = "Unauthorized access. Please log in.";
+                            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                                errorMsg = xhr.responseJSON.message;
+                            }
+
+                            $("#productTableBody").html(`
+            <tr>
+                <td colspan="5" class="text-center text-danger">${errorMsg}</td>
+            </tr>
+            `);
+                        }
+                    });
+                }
+
+                // Initialize the AJAX request when the form is submitted
+                $("#filterForm").on("submit", function (e) {
+                    e.preventDefault(); // Prevent the form from reloading the page
+                    const unitInStock = $("#unitInStockInput").val();
+
+                    // Validate input
+                    if (unitInStock && !isNaN(unitInStock) && unitInStock > 0) {
+                        getProductsByUnitInStock(unitInStock);
+                    } else {
+                        alert("Please enter a valid positive number for Units in Stock.");
+                    }
+                });
+            });
+        </script>-->
+    <!--Bootstrap JS and JQuery-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            const apiUrl = "https://localhost:7179/api/Product";
+
+            // Function to Fetch and Display Products by Units in Stock
+            function getProductsByUnitInStock(unitInStock) {
+                // Check and Decode Token
+                const token = localStorage.getItem("authToken");
+
+                if (!token) {
+                    alert("You must log in to access this page.");
+                    window.location.href = "/login.html";
+                    return;
+                }
+
+                try {
+                    const decodedToken = jwt_decode(token);
+                    console.log("Decoded Token:", decodedToken); // Log the decoded token for debugging
+                    const currentTime = Math.floor(Date.now() / 1000);
+
+                    // Check if the token is expired
+                    if (decodedToken.exp < currentTime) {
+                        alert("Session expired. Please log in again.");
+                        localStorage.removeItem("authToken");
+                        window.location.href = "/login.html";
+                        return;
+                    }
+                } catch (error) {
+                    alert("Invalid session. Please log in again.");
+                    localStorage.removeItem("authToken");
+                    window.location.href = "/login.html";
+                    return;
+                }
+
+                // Make AJAX GET request
+                $.ajax({
+                    url: `${apiUrl}/UnitInStock/${unitInStock}`, // Endpoint to get products by unit in stock
+                    method: "GET",
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Pass token in the Authorization header
+                    },
+                    success: function (response) {
+                        let productTableBody = "";
+
+                        // Check if response has data
+                        if (response && response.length > 0) {
+                            // Loop through the products and create table rows
+                            response.forEach((product) => {
+                                productTableBody += `
+                                    <tr>
+                                        <td>${product.productId}</td>
+                                        <td>${product.productName}</td>
+                                        <td>${product.unitPrice}</td>
+                                        <td>${product.unitsInStock}</td>
+                                    </tr>
+                                `;
+                            });
+                        } else {
+                            productTableBody = `
+                                <tr>
+                                    <td colspan="5" class="text-center text-warning">No products found for the given Units in Stock.</td>
+                                </tr>
+                            `;
+                        }
+
+                        // Inject the generated rows into the table body
+                        $("#productTableBody").html(productTableBody);
+                    },
+                    error: function (xhr) {
+                        console.error("Error fetching data:", xhr.status, xhr.responseText);
+                        let errorMsg = "Failed to fetch product data.";
+
+                        // Check if the error response has a message
+                        if (xhr.status === 401) {
+                            errorMsg = "Unauthorized access. Please log in.";
+                        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMsg = xhr.responseJSON.message;
+                        }
+
+                        $("#productTableBody").html(`
+                            <tr>
+                                <td colspan="5" class="text-center text-danger">${errorMsg}</td>
+                            </tr>
+                        `);
+                    }
+                });
+            }
+
+            // Initialize the AJAX request when the form is submitted
+            $("#filterForm").on("submit", function (e) {
+                e.preventDefault(); // Prevent the form from reloading the page
+                const unitInStock = $("#unitInStockInput").val();
+
+                // Validate input
+                if (unitInStock && !isNaN(unitInStock) && unitInStock > 0) {
+                    getProductsByUnitInStock(unitInStock);
+                } else {
+                    alert("Please enter a valid positive number for Units in Stock.");
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ekart - Update Category</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/Mansi/pages.css">
+    <link rel="stylesheet" href="/css/pages.css">
 </head>
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
@@ -53,7 +53,7 @@
 
 
     <script>
-        const apiUrl = "https://localhost:7118/api/Category"; // API URL
+        const apiUrl = "https://localhost:7179/api/Category"; // API URL
 
         // Check if the token exists in local storage
         const token = localStorage.getItem("authToken");
@@ -61,7 +61,7 @@
         // Check if the user is logged in
         if (!token) {
             alert("You must log in to access this feature.");
-            window.location.href = "/Views/Mansi/include/login.html"; // Redirect to login page
+            window.location.href = "/Views/include/login.html"; // Redirect to login page
         }
 
         // Decode the token and check the user's role
@@ -97,30 +97,30 @@
 
             // Send the updated category data to the API
             $.ajax({
-                url: `${apiUrl}/${categoryId}`, // Endpoint to update the category
+                url: apiUrl , // Endpoint to update the category
                 method: "PUT",
                 contentType: "application/json",
                 data: JSON.stringify(updateData), // Send updated description
                 headers: {
-                    "Authorization": `Bearer ${token}`, // Include the token for authentication
-                },
-                success: function (response) {
-                    // Check if the response contains a 'message' property
-                    if (response && response.message) {
-                        alert(response.message);
-                    } else {
-                        alert("Category updated successfully.");
-                    }
-                    $("#updateCategoryForm")[0].reset(); // Reset the form
-                },
-                error: function (xhr) {
-                    console.error('Error Response:', xhr); // Debugging: Log the error response
-                    const errorMessage = xhr.responseJSON?.error || "Failed to update category.";
-                    const errorDetails = xhr.responseJSON?.details || "";
-                    alert(`${errorMessage}\n${errorDetails}`);
-                },
+                "Authorization": Bearer ${ token }, // Include the token for authentication
+                    },
+            success: function (response) {
+                // Check if the response contains a 'message' property
+                if (response && response.message) {
+                    alert(response.message);
+                } else {
+                    alert("Category updated successfully.");
+                }
+                $("#updateCategoryForm")[0].reset(); // Reset the form
+            },
+            error: function (xhr) {
+                console.error('Error Response:', xhr); // Debugging: Log the error response
+                const errorMessage = xhr.responseJSON?.error || "Failed to update category.";
+                const errorDetails = xhr.responseJSON?.details || "";
+                alert(${ errorMessage }\n${ errorDetails });
+            },
+                });
             });
-        });
     </script>
 
 

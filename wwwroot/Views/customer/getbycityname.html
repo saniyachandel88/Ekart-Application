@@ -3,55 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Management</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/Mansi/pages.css" />
+    <title>Ekart Customer Management</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <style>
+        body {
+            background-color: #F1F0E8; /* Light Beige */
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .navbar {
+            background-color: #B3C8CF; /* Light Blue */
+            padding: 15px;
+            color: white;
+            font-weight: 700;
+        }
+
+        .navbar-brand {
+            color: #fff;
+            font-size: 1.6rem;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+
+        .form-container,
+        .table-container {
+            background: #E5E1DA; /* Cream */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 48%;
+        }
+
+            .form-container h4,
+            .table-container h4 {
+                color: #3C4C55; /* Dark Slate */
+                margin-bottom: 20px;
+            }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #6a1b9a;
+            transition: all 0.3s ease-in-out;
+        }
+
+            .form-control:focus {
+                border-color: #89A8B2; /* Medium Blue */
+                box-shadow: 0 0 5px rgba(155, 89, 182, 0.4);
+            }
+
+        .btn {
+            background-color: #89A8B2; /* Medium Blue */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn:hover {
+                background-color: #5E6C7B; /* Dark Blue */
+            }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        thead {
+            background-color: #E5E1DA; /* Cream */
+            color: #3C4C55; /* Dark Slate */
+        }
+
+        th,
+        td {
+            text-align: center;
+            padding: 12px;
+        }
+
+        tbody tr {
+            background-color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+            tbody tr:hover {
+                background-color: #F1F0E8; /* Light Beige */
+                transform: scale(1.02);
+                transition: all 0.3s ease-in-out;
+            }
+    </style>
 </head>
-<body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+<body>
+    <nav class="navbar">
         <div class="container-fluid">
-            <a class="navbar-brand text-white" href="#">Ekart Customer Management</a>
+            <a class="navbar-brand" href="/Views/Aditi/Login/Index.html">Ekart Customer Management</a>
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <div class="card card-custom">
-            <div class="card-body">
-                <h3 class="text-center mb-4">Manage Customers</h3>
-
-                <!-- Form to Get Customers by City -->
-                <form id="getCustomersByCityForm" class="mb-4">
-                    <h5>Get Customers by City</h5>
-                    <div class="mb-3">
-                        <label for="city" class="form-label">City</label>
-                        <input type="text" class="form-control" id="city" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Fetch Customers</button>
-                </form>
-
-                <!-- Table to Display Customers -->
-                <h5>Customers</h5>
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Customer ID</th>
-                                <th>Company Name</th>
-                                <th>City</th>
-                                <th>Contact Name</th>
-                                <th>Phone</th>
-                            </tr>
-                        </thead>
-                        <tbody id="customersTableBody">
-                            <!-- Customers will be dynamically inserted here -->
-                        </tbody>
-                    </table>
+    <div class="container">
+        <!-- Form Section -->
+        <div class="form-container">
+            <h4>Get Customers by City</h4>
+            <form id="getCustomersByCityForm">
+                <div class="mb-3">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" class="form-control" id="city" placeholder="Enter city name..." required>
                 </div>
-            </div>
+                <button type="submit" class="btn">Fetch Customers</button>
+            </form>
+        </div>
+
+        <!-- Table Section -->
+        <div class="table-container">
+            <h4>Customers</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Customer ID</th>
+                        <th>Company Name</th>
+                        <th>City</th>
+                        <th>Contact Name</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody id="customersTableBody">
+                    <!-- Customers will be dynamically inserted here -->
+                </tbody>
+            </table>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/javascript/Customer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const apiUrl = "https://localhost:7179/api/Customer";
+
+            // Function to Fetch and Display Customers by City
+            function getCustomersByCity(city) {
+                // Check and Decode Token
+                const token = localStorage.getItem("authToken");
+
+                if (!token) {
+                    alert("You must log in to access this page.");
+                    window.location.href = "/Views/include/login.html";
+                    return;
+                }
+
+                try {
+                    const decodedToken = jwt_decode(token);
+                    console.log("Decoded Token:", decodedToken); // Log the decoded token for debugging
+                    const currentTime = Math.floor(Date.now() / 1000);
+
+                    // Check if the token is expired
+                    if (decodedToken.exp < currentTime) {
+                        alert("Session expired. Please log in again.");
+                        localStorage.removeItem("authToken");
+                        window.location.href = "/Views/include/login.html";
+                        return;
+                    }
+                } catch (error) {
+                    alert("Invalid session. Please log in again.");
+                    localStorage.removeItem("authToken");
+                    window.location.href = "/Views/include/login.html";
+                    return;
+                }
+
+                // Make AJAX GET request
+                $.ajax({
+                    url: `${apiUrl}/${city}`, // Endpoint to get customers by city
+                    type: "GET",
+                    dataType: "json",
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Pass token in the Authorization header
+                    },
+                    success: function (data) {
+                        populateCustomersTable(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                        alert(`Error fetching customers: ${xhr.responseText}`);
+                    }
+                });
+            }
+
+            // Populate Customers Table
+            function populateCustomersTable(customers) {
+                $('#customersTableBody').empty();
+
+                if (!customers || customers.length === 0) {
+                    $('#customersTableBody').append('<tr><td colspan="5">No customers found.</td></tr>');
+                    return;
+                }
+
+                customers.forEach(customer => {
+                    $('#customersTableBody').append(`
+                                 <tr>
+                                     <td>${customer.customerId || 'N/A'}</td>
+                                     <td>${customer.companyName || 'N/A'}</td>
+                                     <td>${customer.city || 'N/A'}</td>
+                                     <td>${customer.contactName || 'N/A'}</td>
+                                     <td>${customer.phone || 'N/A'}</td>
+                                 </tr>
+                             `);
+                });
+            }
+
+            // Handle form submission
+            $('#getCustomersByCityForm').submit(function (e) {
+                e.preventDefault();
+
+                // Get the city name
+                const city = $('#city').val();
+
+                // Validate city name
+                if (!city) {
+                    alert("Please enter a valid city name.");
+                    return;
+                }
+
+                // Fetch customers by city
+                getCustomersByCity(city);
+            });
+        });
+    </script>
 </body>
 </html>

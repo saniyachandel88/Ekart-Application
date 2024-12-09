@@ -123,6 +123,25 @@ namespace Ekart_Application.EkartMapping
             CreateMap<Customer, GetByRegionDto>()
                 .ForMember(dest => dest.Region, opt => opt.MapFrom(src => src.Region))
                 .ForMember(dest => dest.OrderCount, opt => opt.MapFrom(src => src.Orders.Count));
+            CreateMap<Supplier, SupplierDtoA>()
+     .ForMember(dest => dest.SupplierId, opt => opt.MapFrom(src => src.SupplierId))
+     .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.CompanyName))
+     .ForMember(dest => dest.ContactName, opt => opt.MapFrom(src => src.ContactName))
+     .ForMember(dest => dest.ContactTitle, opt => opt.MapFrom(src => src.ContactTitle))
+     .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+     .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City))
+     .ForMember(dest => dest.Region, opt => opt.MapFrom(src => src.Region))
+     .ForMember(dest => dest.PostalCode, opt => opt.MapFrom(src => src.PostalCode))
+     .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
+     .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
+     .ForMember(dest => dest.Fax, opt => opt.MapFrom(src => src.Fax))
+     .ForMember(dest => dest.HomePage, opt => opt.MapFrom(src => src.HomePage))
+     // Ignore additional properties
+     .ForSourceMember(src => src.Email, opt => opt.DoNotValidate())
+     .ForSourceMember(src => src.Password, opt => opt.DoNotValidate())
+     .ForSourceMember(src => src.IsApproved, opt => opt.DoNotValidate())
+     .ForSourceMember(src => src.Products, opt => opt.DoNotValidate());
+
         }
     }
 }

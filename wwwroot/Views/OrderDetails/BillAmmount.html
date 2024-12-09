@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Bill Amount</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <style>
+        body {
+            background-color: #F1F0E8; /* Light lavender background */
+            font-family: 'Arial', sans-serif;
+        }
+
+        h2 {
+            color: #4E6353; /* Darker green for headers */
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #89A8B2; /* Soft greenish blue button */
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-primary:hover {
+                background-color: #B3C8CF; /* Lighter shade on hover */
+            }
+
+        label {
+            color: #4E6353; /* Darker green for labels */
+        }
+
+        input[type="number"] {
+            border: 1px solid #89A8B2;
+            border-radius: 8px;
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+            input[type="number"]:focus {
+                border-color: #89A8B2;
+                box-shadow: 0 0 5px rgba(137, 168, 178, 0.5);
+            }
+
+        #billAmount {
+            color: #4E6353;
+            border: 1px solid #89A8B2;
+            border-radius: 8px;
+            background-color: #E5E1DA; /* Light background for bill amount */
+            padding: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .container {
+            background-color: white;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Get Bill Amount</h2>
+
+        <!-- Form to enter Order ID -->
+        <form id="getBillAmountForm">
+            <label for="orderId">Order ID:</label>
+            <input type="number" id="orderId" name="orderId" required>
+            <button type="submit" class="btn-primary">Get Bill Amount</button>
+        </form>
+
+        <!-- Display the fetched bill amount here -->
+        <h3 id="billAmount"></h3>
+    </div>
+
+    <script>
+        const apiUrl = "https://localhost:7179/api/OrderDetails"; // API base URL
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('authToken');
+            alert('You have been logged out.');
+            window.location.href = '/Views/include/login.html'; // Redirect to login
+        }
+
+        // Validate and check the token
+        function validateToken() {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                alert("You must log in to access this page.");
+                window.location.href = "/Views/include/login.html";
+                return null;
+            }
+
+            try {
+                const decodedToken = jwt_decode(token);
+                const currentTime = Math.floor(Date.now() / 1000);
+                if (decodedToken.exp < currentTime) {
+                    alert("Session expired. Please log in again.");
+                    localStorage.removeItem('authToken');
+                    window.location.href = "/Views/include/login.html";
+                    return null;
+                }
+                return token; // Token is valid
+            } catch (error) {
+                alert("Invalid session. Please log in again.");
+                localStorage.removeItem('authToken');
+                window.location.href = "/Views/include/login.html";
+                return null;
+            }
+        }
+
+        $(document).ready(function () {
+            // Handle form submission to fetch bill amount
+            $("#getBillAmountForm").submit(function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                const orderId = $("#orderId").val();
+                if (!orderId) {
+                    alert("Please enter a valid Order ID.");
+                    return;
+                }
+
+                const token = validateToken(); // Get and validate token
+                if (!token) return;
+
+                console.log(`Fetching bill amount for Order ID: ${orderId}`);
+
+                // Send AJAX request to fetch the bill amount
+                $.ajax({
+                    url: `${apiUrl}/${orderId}/bill-amount`, // API endpoint
+                    type: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}` // Pass token in header
+                    },
+                    success: function (response) {
+                        console.log("Response from API:", response);
+                        if (typeof response === "number") {
+                            $("#billAmount").text(`Bill Amount: $${response.toFixed(2)}`);
+                        } else {
+                            $("#billAmount").text("Unexpected response from server.");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Log the error details for debugging
+                        console.error("Error details:", xhr.responseText, status, error);
+                        const errorMsg = xhr.responseJSON?.message || "Failed to fetch bill amount.";
+                        alert(errorMsg);
+                        $("#billAmount").text("Error fetching bill amount.");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+

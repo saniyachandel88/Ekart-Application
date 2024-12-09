@@ -16,7 +16,7 @@ namespace Ekart_Application.Controllers
         {
             _supplierService = supplierService;
         }
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,supplier")]
         [HttpPost("Add")]
         public async Task<IActionResult> CreateSupplier([FromBody] CreateSupplierDtoS createSupplierDto)
         {
@@ -141,10 +141,12 @@ namespace Ekart_Application.Controllers
         }
         [Authorize(Roles = "admin")]
         // Update Supplier
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateSupplier(int id, [FromBody] UpdateSupplierDtoM updateSupplierDto)
+        [HttpPut("UpdateSupplier")]
+        //[Route("UpdateSupplier")]
+        public async Task<IActionResult> UpdateSupplier(int id,[FromBody] UpdateSupplierDtoM updateSupplierDto)
         {
             // Call the service to update supplier
+         
             await _supplierService.UpdateSupplierAsync(id, updateSupplierDto);
 
             return NoContent(); // No content on successful update

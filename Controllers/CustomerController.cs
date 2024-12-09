@@ -17,7 +17,7 @@ namespace Ekart_Application.Controllers
             _customerService = customerService;
         }
         [Authorize(Roles = "admin")]
-        [HttpGet("/{city}")]
+        [HttpGet("{city}")]
         public async Task<IActionResult> GetCustomerByCity(string city)
         {
             var customers = await _customerService.GetCustomerByCity(city);
@@ -92,17 +92,29 @@ namespace Ekart_Application.Controllers
         [HttpDelete("{customerId}")]
         public async Task<IActionResult> DeleteCustomer(string customerId)
         {
-            // Call service to delete customer
-            var result = await _customerService.DeleteCustomerAsync(customerId);
-
-            // If no customer is found or deletion fails, throw an exception
-            if (!result)
+            try
             {
-                throw new KeyNotFoundException($"Customer with ID {customerId} not found.");
+                // Call service to delete customer
+                var result = await _customerService.DeleteCustomerAsync(customerId);
+
+                // Return success message if customer is deleted
+                return Ok($"Customer with ID {customerId} deleted successfully.");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                // Return 404 Not Found if the customer is not found
+                return NotFound(new { message = ex.Message });
             }
 
-            // Return success message if customer is deleted
-            return Ok($"Customer with ID {customerId} deleted successfully.");
+            catch (Exception ex)
+            {
+                // Log and handle any unexpected errors
+                Console.WriteLine($"Unexpected Error: {ex.Message}");
+                return StatusCode(500, new { message = "An unexpected error occurred.", detail = ex.Message });
+            }
         }
+
     }
 }
+   
+

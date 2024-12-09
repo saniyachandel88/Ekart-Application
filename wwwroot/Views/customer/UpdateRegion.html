@@ -6,22 +6,108 @@
     <title>Update Customer Region</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
+
+<style>
+    /* Custom Navbar Styles */
+    .navbar {
+        background-color: #6f42c1 !important; /* Violet navbar */
+    }
+
+    .navbar-brand, .nav-link {
+        color: white !important;
+    }
+
+    .navbar-toggler-icon {
+        background-color: white;
+    }
+
+    /* Button Customization */
+    .btn-primary {
+        background-color: #6f42c1; /* Violet button */
+        border-color: #6f42c1;
+    }
+
+        .btn-primary:hover {
+            background-color: #5a2d9c; /* Darker violet on hover */
+            border-color: #5a2d9c;
+        }
+
+    /* Card Customization */
+    .card {
+        border: 1px solid #6f42c1;
+    }
+
+    .card-body {
+        background-color: #f8f9fa;
+    }
+
+    .card-title {
+        color: #6f42c1;
+    }
+
+    h4 {
+        color: #6f42c1;
+        font-weight: 600;
+        margin-bottom: 40px;
+    }
+
+    /* Custom link for navigation */
+    .nav-link {
+        color: #fff !important;
+    }
+
+        .nav-link:hover {
+            color: #e2e6ea !important;
+        }
+
+    /* Form Customization */
+    .form-label {
+        color: #6f42c1;
+    }
+
+    .form-control {
+        border-color: #6f42c1;
+    }
+
+        .form-control:focus {
+            border-color: #5a2d9c;
+            box-shadow: 0 0 0 0.25rem rgba(88, 68, 198, 0.25);
+        }
+</style>
+</head>
 <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand text-white" href="/Views/index.html">Ekart</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <a class="navbar-brand" href="#">Ekart</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link text-white" href="/Views/order/addorder.html">Add Order</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="/Views/order/UpdateOrder.html">Update Orders</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="/Views/customer/UpdateRegion.html">Update Customer Region</a></li>
-                </ul>
             </div>
         </div>
     </nav>
+    <!--Update Customer Region-->
+    <!--<div class="container my-5">
+        <h4 class="mb-4">Update Customer Region</h4>
+        <form id="updateRegionForm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="customerId" class="form-label">Customer ID</label>
+                    <input type="text" id="customerId" class="form-control" placeholder="Enter Customer ID" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="region" class="form-label">Region</label>
+                    <input type="text" id="region" class="form-control" placeholder="Enter Region" required>
+                </div>
+            </div>
+            <button type="submit" id="updateRegionBtn" class="btn btn-primary">Update Region</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
     <!-- Update Customer Region -->
     <div class="container my-5">
         <h4 class="mb-4">Update Customer Region</h4>
@@ -40,7 +126,79 @@
         </form>
     </div>
 
+    <!-- jQuery and Bootstrap JS for functionality -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/js/UpdateRegion.js"></script> <!-- JS logic for updating customer region -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#updateRegionForm").on("submit", function (e) {
+                e.preventDefault();
+
+                const customerId = $("#customerId").val();
+                const region = $("#region").val();
+
+                // Check and Decode Token
+                const token = localStorage.getItem("authToken");
+
+                if (!token) {
+                    alert("You must log in to access this page.");
+                    window.location.href = "/login.html";
+                    return;
+                }
+
+                try {
+                    const decodedToken = jwt_decode(token);
+                    console.log("Decoded Token:", decodedToken); // Log the decoded token for debugging
+                    const currentTime = Math.floor(Date.now() / 1000);
+
+                    // Check if the token is expired
+                    if (decodedToken.exp < currentTime) {
+                        alert("Session expired. Please log in again.");
+                        localStorage.removeItem("authToken");
+                        window.location.href = "/login.html";
+                        return;
+                    }
+                } catch (error) {
+                    alert("Invalid session. Please log in again.");
+                    localStorage.removeItem("authToken");
+                    window.location.href = "/login.html";
+                    return;
+                }
+
+                const updateData = {
+                    region: region
+                };
+
+                $.ajax({
+                    url: `https://localhost:7179/api/Customer/Edit/${customerId.trim()}`,
+                    type: "PATCH",
+                    contentType: "application/json",
+                    data: JSON.stringify(updateData),
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Pass token in the Authorization header
+                    },
+                    success: function () {
+                        alert("Customer region updated successfully.");
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error status:", status);
+                        console.log("Error response:", xhr.responseText);
+
+                        if (xhr.status === 404) {
+                            alert("Customer not found.");
+                        } else if (xhr.status === 500) {
+                            alert("Internal server error occurred.");
+                        } else {
+                            alert(xhr.responseJSON?.error || "Failed to update customer region.");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
+
