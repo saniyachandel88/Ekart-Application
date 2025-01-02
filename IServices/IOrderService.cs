@@ -20,5 +20,7 @@ namespace Ekart_Application.IServices
         Task PartialUpdateOrderAsync(string? customerId, UpdateOrderDtoT updateOrderDto);
         Task<IEnumerable<OrderDtoA>> GetOrdersBetweenDatesAsync(DateTime fromDate, DateTime toDate);
         Task<string> GetCustomerWithHighestOrderAsync();
+        IEnumerable<object> GetUniqueProductsOrderedByCustomer(string customerId);
+
     }
 }

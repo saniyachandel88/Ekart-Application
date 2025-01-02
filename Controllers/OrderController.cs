@@ -105,5 +105,12 @@ namespace Ekart_Application.Controllers
 
             return Ok(new { CustomerId = customerId });
         }
+
+        [HttpGet("customer/{customerId}")]
+        public IActionResult GetUniqueProductsOrderedByCustomer(string customerId)
+        {
+            var products = _orderService.GetUniqueProductsOrderedByCustomer(customerId);
+            return Ok(products);
+        }
     }
 }

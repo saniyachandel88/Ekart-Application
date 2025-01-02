@@ -155,5 +155,22 @@ namespace Ekart_Application.IServices.Services
 
 
         }
-    }
+        public IEnumerable<object> GetUniqueProductsOrderedByCustomer(string customerId)
+        {
+            var result = _context.Orders
+                .Where(o => o.CustomerId == customerId)
+                .SelectMany(o => o.OrderDetails)
+                .GroupBy(od => od.ProductId)
+                .Select(g => new
+                {
+                    ProductId = g.Key,
+                    ProductName = g.FirstOrDefault().Product.ProductName, 
+                    QuantityOrdered = g.Sum(od => od.Quantity),  
+                    TotalPrice = g.Sum(od => od.UnitPrice * od.Quantity) 
+                })
+                .ToList();
+
+            return result;
+        }
+        }
 }
